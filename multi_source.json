@@ -1,0 +1,53 @@
+[
+{
+"name":"Altinity plugin for ClickHouse 01",
+"type":"vertamedia-clickhouse-datasource",
+"access":"proxy",
+"url":"http://clickhouse01:8123",
+"user":"",
+"database":"",
+"basicAuth":false,
+"isDefault":false
+},
+{
+"name":"Altinity plugin for ClickHouse 02",
+"type":"vertamedia-clickhouse-datasource",
+"access":"proxy",
+"url":"http://clickhouse02:8123",
+"user":"",
+"database":"",
+"basicAuth":false,
+"isDefault":false
+},
+{
+"name":"Altinity plugin for ClickHouse 03",
+"type":"vertamedia-clickhouse-datasource",
+"access":"proxy",
+"url":"http://clickhouse03:8123",
+"user":"",
+"database":"",
+"basicAuth":false,
+"isDefault":false
+},
+{ 
+"name":"Altinity plugin for ClickHouse 04",
+"type":"vertamedia-clickhouse-datasource",
+"access":"proxy",
+"url":"http://clickhouse04:8123",
+"user":"",
+"database":"",
+"basicAuth":false,
+"isDefault":false
+},
+{
+"name":"Prometheus",
+"type":"prometheus",
+"access":"proxy",
+"url":"http://prometheus:9090",
+"user":"",
+"database":"",
+"basicAuth":false,
+"isDefault":true
+}
+]
+

@@ -1,0 +1,160 @@
+version: '3.5'
+services:
+  zookeeper:
+    image: zookeeper:3.7
+    container_name: zookeeper
+    hostname: zookeeper
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.10
+  clickhouse01:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse01
+    hostname: clickhouse01
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.11
+    ports:
+      - "127.0.0.1:8123:8123"
+      - "127.0.0.1:9000:9000"
+    volumes:
+      - ${PWD}/clickhouse01:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+  clickhouse02:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse02
+    hostname: clickhouse02
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.12
+    volumes:
+      - ${PWD}/clickhouse02:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+  clickhouse03:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse03
+    hostname: clickhouse03
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.13
+    volumes:
+      - ${PWD}/clickhouse03:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+  clickhouse04:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse04
+    hostname: clickhouse04
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.14
+    volumes:
+      - ${PWD}/clickhouse04:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus/
+    container_name: prometheus
+    hostname: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.100
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    container_name: exporter
+    hostname: exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.101
+  grafana:
+    image: grafana/grafana
+    user: root
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    container_name: grafana
+    hostname: grafana
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.102
+  alertmanager-bot:
+    platform: linux/amd64
+    command:
+      - --alertmanager.url=http://alertmanager:9093
+      - --log.level=info
+      - --store=bolt
+      - --bolt.path=/data/bot.db
+      - --telegram.admin=220526484
+      - --telegram.token=5923431747:AAFg1856Lz4Zn0ZYCNoO4vTC7la0e7IfVS8
+    image: metalmatze/alertmanager-bot:0.4.3
+    user: root
+    ports:
+      - 8080:8080
+    container_name: alertmanager-bot
+    hostname: alertmanager-bot
+    environment:
+      TZ: "Europe/Moscow"
+    restart: unless-stopped
+    volumes:
+      - ./alertmanager-bot:/data
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.103
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    user: root
+    ports:
+      - 127.0.0.1:9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    container_name: alertmanager
+    hostname: alertmanager
+    environment:
+      TZ: "Europe/Moscow"
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/etc/alertmanager/data'
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.104
+
+
+networks:
+  clickhouse-network:
+    name: clickhouse-network
+    ipam:
+      config:
+        - subnet: 172.23.0.0/24
