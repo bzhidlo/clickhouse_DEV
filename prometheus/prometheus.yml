@@ -1,0 +1,31 @@
+scrape_configs:
+  - job_name: node
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['node-exporter:9100']
+  - job_name: clickhouse1
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['clickhouse01:9363']
+  - job_name: clickhouse2
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['clickhouse02:9363']
+  - job_name: clickhouse3
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['clickhouse03:9363']
+  - job_name: clickhouse4
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['clickhouse04:9363']
+
+rule_files:
+  - 'alert.rules'
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "alertmanager:9093"
