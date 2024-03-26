@@ -102,11 +102,12 @@ Monitoring
 ```sh
 make after
 ```
-1 Create datasource prometheus:9090
-2 Install plugin Altinity plugin for ClickHouse
-3 Create datasource  "Altinity plugin for ClickHouse" for any Clickhouse databases [clickhouse01,clickhouse02 ...]
-4 Import dashboards: 2515 and 13500 and 14432
-5 Create on all clickhouse hosts distributed table 'CREATE TABLE system.query_log_all AS system.query_log ENGINE = Distributed(company_cluster, system, query_log);'
+
+- 1 Create datasource prometheus:9090
+- 2 Install plugin Altinity plugin for ClickHouse
+- 3 Create datasource  "Altinity plugin for ClickHouse" for any Clickhouse databases [clickhouse01,clickhouse02 ...]
+- 4 Import dashboards: 2515 and 13500 and 14432
+- 5 Create on all clickhouse hosts distributed table 'CREATE TABLE system.query_log_all AS system.query_log ENGINE = Distributed(company_cluster, system, query_log);'
 
 https://grafana.com/grafana/dashboards/2515-clickhouse-queries/
 https://grafana.com/grafana/plugins/vertamedia-clickhouse-datasource/
