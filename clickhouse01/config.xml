@@ -77,6 +77,7 @@
     </distributed_ddl>
 
     <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
+
     <prometheus>
         <endpoint>/metrics</endpoint>
         <port>9363</port>
@@ -85,4 +86,5 @@
         <asynchronous_metrics>true</asynchronous_metrics>
         <status_info>true</status_info>
     </prometheus>
+
 </company>
