@@ -19,6 +19,15 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ['clickhouse04:9363']
+  - job_name: daily
+    static_configs:
+      - targets:  'clickhouse01:9363'
+        scrape_interval: 1d
+    scrape_timeout: 30s
+    metrics_path: "/metrics_daily"
+    basic_auth:
+      username: 'admin'
+      password: 'password'
 
 rule_files:
   - 'alert.rules'

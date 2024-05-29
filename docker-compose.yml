@@ -18,7 +18,7 @@ services:
       - "127.0.0.1:8123:8123"
       - "127.0.0.1:9000:9000"
     volumes:
-      - ${PWD}/clickhouse01:/etc/clickhouse-server
+      - ./clickhouse01:/etc/clickhouse-server
     depends_on:
       - zookeeper
   clickhouse02:
@@ -29,7 +29,7 @@ services:
       clickhouse-network:
         ipv4_address: 172.23.0.12
     volumes:
-      - ${PWD}/clickhouse02:/etc/clickhouse-server
+      - ./clickhouse02:/etc/clickhouse-server
     depends_on:
       - zookeeper
   clickhouse03:
@@ -40,7 +40,7 @@ services:
       clickhouse-network:
         ipv4_address: 172.23.0.13
     volumes:
-      - ${PWD}/clickhouse03:/etc/clickhouse-server
+      - ./clickhouse03:/etc/clickhouse-server
     depends_on:
       - zookeeper
   clickhouse04:
@@ -51,7 +51,7 @@ services:
       clickhouse-network:
         ipv4_address: 172.23.0.14
     volumes:
-      - ${PWD}/clickhouse04:/etc/clickhouse-server
+      - ./clickhouse04:/etc/clickhouse-server
     depends_on:
       - zookeeper
   prometheus:
